@@ -4,12 +4,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 
 public class SortingComparison {
     public static void main(String[] args) {
-        String inputFileName = "dataset_200_reversed.txt"; // disesuaikan dengan input file
+        String inputFileName = "dataset_20000_random.txt"; // disesuaikan dengan input file
         // MemoryUsage beforeMemoryUsage = getMemoryUsage();
 
         int[] inputData = SortingComparison.readInputFile(inputFileName);
@@ -24,6 +25,8 @@ public class SortingComparison {
         long insertionSortTime = insertionSortEndTime - insertionSortStartTime;
         long insertionSortMemoryUsed = measureMemoryUsage();
         
+        String outputFileName = "output_insertion_" + inputFileName;
+        writeToFile(outputFileName, inputDataCopy);
 
         // MemoryUsage afterInsertionSortMemoryUsage = getMemoryUsage();
 
@@ -37,6 +40,9 @@ public class SortingComparison {
         // MemoryUsage afterQuickSortMemoryUsage = getMemoryUsage();
 
         long quickSortMemoryUsed = measureMemoryUsage();
+
+        String outputQuicksortFileName = "output_quicksort_" + inputFileName;
+        writeToFile(outputQuicksortFileName, inputDataCopy);
         
 
         // System.out.println("Sorted Data (Insertion Sort):");
@@ -141,7 +147,7 @@ public class SortingComparison {
     public static int[] readInputFile(String fileName) {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
-            int[] data = new int[200]; // size array sesuaikan dengan size input
+            int[] data = new int[20000]; // size array sesuaikan dengan size input
             int i = 0;
             while ((line = reader.readLine()) != null && i < data.length) {
                 data[i] = Integer.parseInt(line);
@@ -160,5 +166,16 @@ public class SortingComparison {
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
         return totalMemory - freeMemory;
+    }
+
+    public static void writeToFile(String fileName, int[] data) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (int value : data) {
+                writer.write(Integer.toString(value));
+                writer.newLine(); 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
